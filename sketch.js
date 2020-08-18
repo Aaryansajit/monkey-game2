@@ -12,13 +12,20 @@ var monkey
 
 var score
 
+var PLAY = 1
+
+var END = 0
+
+var gameState = PLAY
+
+var count = 0
 
 function preload(){
   bgImage = loadImage("jungle.jpg");
   
   groundImage = loadImage("ground.jpg");
   
-  player_running =loadAnimation           ("Monkey_01.png","Monkey_02.png","Monkey_03.png","Monkey_04.png","Monkey_05.png","Monkey_06.png","Monkey_07.png","Monkey_08.png","Monkey_09.png","Monkey_10.png")
+  player_running = loadAnimation           ("Monkey_01.png","Monkey_02.png","Monkey_03.png","Monkey_04.png","Monkey_05.png","Monkey_06.png","Monkey_07.png","Monkey_08.png","Monkey_09.png","Monkey_10.png");
 
   bananaImage = loadImage("Banana.png");
   
@@ -45,10 +52,6 @@ function setup() {
   //  monkey.velocityX = 2
   
    ground = createSprite(300,275,600,5);
-  //ound.addImage (groundImage)
-  //ound.scale = 0.05
-  //ound.x = ground.width/2;
-  //ound.velocityX = -2
   ground.visible = false
   
   bananagroup = new Group();
@@ -57,16 +60,21 @@ function setup() {
 
 function draw(){ 
   background("white")
+  
+  if(gameState === play){
   if (jungle.x < 100){
     jungle.x = jungle.width/2;
   }
+    
   if (ground.x < 100){
     ground.x = ground.width/2;
   }
+    
   if (bananagroup.isTouching(monkey)){
   bananagroup.destroyEach();
     score = score+2;
   }
+    
   switch(score){
     case 10:monkey.scale = 0.12;
     break;
@@ -78,9 +86,11 @@ function draw(){
     break;
     default:break;   
   }
+    
   if(keyDown ("space")){
   monkey.velocityY = -10
   }
+    
   monkey.velocityY = monkey.velocityY +0.8
   monkey.collide(ground)
   
@@ -88,11 +98,25 @@ function draw(){
   
   spawnObstacle();
  
-  if(obstaclegroup.isTouching(monkey)){
-    console.log("decreasing")   
-  monkey.scale = 0.08;
+  
+    if(obstaclegroup.isTouching(monkey)){
+    if(count === 1){
+    gameState = END;
+     }  
+    monkey.scale = 0.08;
+    count ++
+  }  
   }
   
+  if (gameState === END){
+  monkey.velocitX = 0
+  obstaclegroup.setvelocityXEach (0)
+  ground.velocityX = 0
+  jungle.velocityX = 0
+  bananagroup.setvelocityXEach (0)
+  bananagroup.setlifetimeEach (-1)  
+  }
+
   drawSprites();
   
   stroke  ("white");
@@ -122,4 +146,4 @@ var obstacle = createSprite (600,275,40,10);
 }
 }
 
-//function 
+
