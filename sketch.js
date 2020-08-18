@@ -111,7 +111,7 @@ function draw(){
   }
   
   if (gameState === END){
-  monkey.velocitX = 0
+  monkey.velocityX = 0
   obstaclegroup.setvelocityXEach (0)
   ground.velocityX = 0
   jungle.velocityX = 0
