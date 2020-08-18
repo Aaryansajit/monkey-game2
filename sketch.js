@@ -103,8 +103,10 @@ function draw(){
     if(count === 1){
     gameState = END;
      }  
+      else(
     monkey.scale = 0.08;
     count ++
+       }
   }  
   }
   
